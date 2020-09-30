@@ -4,7 +4,7 @@ if [ ! -d build ]; then
     echo "-- Build directory not exists"
 fi
 
-cmake -S . -B build -Wdev --graphviz=build/dependencies.dot
+cmake -S . -B build --log-level=VERBOSE -Wdev
 
 if [ $(uname) == "Linux" ]; then
     cpu_core=$(nproc)

@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "cd build && cmake -Wdev ../ && make"
+            "command": "cd build && cmake --log-level=VERBOSE -Wdev ../ && make"
         },
         {
             "label": "dependencies",
