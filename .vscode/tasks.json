@@ -6,7 +6,12 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "cd build && cmake ../ && make"
+            "command": "cd build && cmake -Wdev ../ && make"
+        },
+        {
+            "label": "dependencies",
+            "type": "shell",
+            "command": "sh dependencies.sh"
         },
         {
             "label": "cpack",

@@ -12,29 +12,34 @@ configure_file (
 include_directories(
     /usr/local/include
     ${PROJECT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}/libs/glad/include 
+    ${PROJECT_SOURCE_DIR}/libs/glfw/include
 )
 link_directories(
     /usr/local/lib
     ${PROJECT_BINARY_DIR}
 )
 
-# add_library(ur_lib
-#     SHARED
-#     IMPORTED
-# )
-# set_target_properties(ur_lib 
-#     PROPERTIES 
-#     IMPORTED_LOCATION 
-#     ${PROJECT_SOURCE_DIR}/path/to/ur_lib)
+# GLFW lib
+add_library(glfw 
+    SHARED 
+    IMPORTED)
+set_target_properties(glfw 
+    PROPERTIES 
+    IMPORTED_LOCATION 
+    ${PROJECT_SOURCE_DIR}/libs/glfw/lib/libglfw.3.dylib)
+
+set(LINK_LIBS libs glfw)
 
 add_subdirectory(src)
+add_subdirectory(libs)
 
 add_executable(main main.cpp)
 target_include_directories(
     main PUBLIC
     ${PROJECT_BINARY_DIR}
 )
-target_link_libraries(main src)
+target_link_libraries(main src ${LINK_LIBS})
 
 # Test case 
 include(CTest)

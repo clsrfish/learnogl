@@ -4,9 +4,7 @@ if [ ! -d build ]; then
     echo "-- Build directory not exists"
 fi
 
-cd build
-
-cmake ../
+cmake -S . -B build -Wdev --graphviz=build/dependencies.dot
 
 if [ $(uname) == "Linux" ]; then
     cpu_core=$(nproc)
@@ -18,6 +16,7 @@ else
 fi
 echo "-- CPU core: $cpu_core"
 
-make -j${cpu_core}
+make -d -j${cpu_core} -C build
 
-./main
+echo "-- Launching main"
+./build/main
