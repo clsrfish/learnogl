@@ -11,10 +11,17 @@
             "program": "${workspaceFolder}/build/main",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/build",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "lldb",
+            "logging": {
+                "moduleLoad": false,
+                "trace": true
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "miDebuggerPath": "${env:HOME}/.vscode/extensions/ms-vscode.cpptools-1.0.1/debugAdapters/lldb-mi/bin/lldb-mi"
+            },
             "preLaunchTask": "build"
         }
     ]

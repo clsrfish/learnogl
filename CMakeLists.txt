@@ -9,6 +9,12 @@ configure_file (
   ${PROJECT_BINARY_DIR}/config.h
 )
 
+IF (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
+    ADD_DEFINITIONS(-DWindows)
+ELSE (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Linux")
+    ADD_DEFINITIONS(-DLinux)
+ENDIF ()
+
 include_directories(
     /usr/local/include
     ${PROJECT_BINARY_DIR}

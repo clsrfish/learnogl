@@ -2,43 +2,35 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <ctime>
-
-#ifdef Windows
-// Windows下文件目录层级是'\\'
-#define __FILENAME__ (strrchr(__FILE__, '\\') + 1)
-#elif Linux
-// Linux下文件目录层级是'/'
-#define __FILENAME__ (strrchr(__FILE__, '/') + 1)
-#else
-#define __FILENAME__ (strrchr(__FILE__, '/') + 1)
-#endif
+#include "../utils/log.h"
 
 // https://learnopengl-cn.github.io/01%20Getting%20started/03%20Hello%20Window
 namespace
 {
-    int main()
+    int qwe = 123;
+    int helloWindowImpl()
     {
-        std::cout << __FILENAME__ << std::endl;
+        LOG_I(__FILENAME__);
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #if defined(__APPLE__)
-        std::cout << "Running on macOS, enable forward compatibilty." << std::endl;
+        LOG_D("Running on macOS, enable forward compatibilty.");
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #endif
 
         GLFWwindow *window = glfwCreateWindow(800, 600, __FILENAME__, nullptr, nullptr);
         if (window == nullptr)
         {
-            std::cout << "Failed to create GLFW window" << std::endl;
+            LOG_E("Failed to create GLFW window");
             glfwTerminate();
             return -1;
         }
         glfwMakeContextCurrent(window);
         if (!gladLoadGLLoader((GLADloadproc)(glfwGetProcAddress)))
         {
-            std::cout << "Failed to initialize GLAD" << std::endl;
+            LOG_E("Failed to initialize GLAD");
             glfwTerminate();
             return -1;
         }
@@ -53,6 +45,7 @@ namespace
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             {
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
+                LOG_I("ESCAPE pressed, exiting");
             }
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -66,8 +59,10 @@ namespace
         return 0;
     }
 } // namespace
-
-void helloWindow()
+namespace getting_started
 {
-    main();
-}
+    void helloWindow()
+    {
+        helloWindowImpl();
+    }
+} // namespace getting_started
