@@ -43,7 +43,7 @@ namespace textures
         out vec4 FragColor;
 
         void main() {
-            FragColor = texture(uTex, texCoord);
+            FragColor = texture(uTex, texCoord) * vec4(color, 1.0);
         }
     )";
     int texturesImpl()
