@@ -38,12 +38,13 @@ namespace textures
 
         in vec3 color;
         in vec2 texCoord;
-        uniform sampler2D uTex;
+        uniform sampler2D texture0;
+        uniform sampler2D texture1;
 
         out vec4 FragColor;
 
         void main() {
-            FragColor = texture(uTex, texCoord) * vec4(color, 1.0);
+            FragColor = mix(texture(texture0, texCoord), texture(texture1, texCoord), 0.2);
         }
     )";
     int texturesImpl()
@@ -150,16 +151,17 @@ namespace textures
         glDeleteShader(vertexShader);
         glDeleteShader(fragShader);
 
-        unsigned int texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        stbi_set_flip_vertically_on_load(1);
+        unsigned int containerTexture;
+        glGenTextures(1, &containerTexture);
+        glBindTexture(GL_TEXTURE_2D, containerTexture);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        int width, height;
+        int width, height, channels;
         char *textureFileName = "assets/container.jpg";
-        auto data = stbi_load(textureFileName, &width, &height, nullptr, 0);
+        auto data = stbi_load(textureFileName, &width, &height, &channels, 0);
         if (data == nullptr)
         {
             LOG_E("Failed to load texture: %s", textureFileName);
@@ -167,6 +169,26 @@ namespace textures
             return -1;
         }
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        stbi_image_free(data);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        unsigned int faceTexture;
+        glGenTextures(1, &faceTexture);
+        glBindTexture(GL_TEXTURE_2D, faceTexture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        textureFileName = "assets/awesomeface.png";
+        data = stbi_load(textureFileName, &width, &height, &channels, 0);
+        if (data == nullptr)
+        {
+            LOG_E("Failed to load texture: %s", textureFileName);
+            glfwTerminate();
+            return -1;
+        }
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
         stbi_image_free(data);
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -181,7 +203,14 @@ namespace textures
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
             glUseProgram(shaderProgram);
-            glBindTexture(GL_TEXTURE_2D, texture);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, containerTexture);
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, faceTexture);
+            auto texture0 = glGetUniformLocation(shaderProgram, "texture0");
+            glUniform1i(texture0, 0);
+            auto texture1 = glGetUniformLocation(shaderProgram, "texture1");
+            glUniform1i(texture1, 1);
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void *)0);
 
