@@ -31,7 +31,7 @@
                 "reveal": "always",
                 "panel": "shared",
             },
-            "command": "cd build && cmake ../ && cpack --config CPackConfig.cmake"
+            "command": "cmake -S . -B build && cpack --config CPackConfig.cmake"
         }
     ]
 }

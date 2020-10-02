@@ -20,6 +20,7 @@ include_directories(
     ${PROJECT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR}/libs/glad/include 
     ${PROJECT_SOURCE_DIR}/libs/glfw/include
+    ${PROJECT_SOURCE_DIR}/libs/stb_image/include
 )
 link_directories(
     /usr/local/lib
@@ -35,7 +36,7 @@ set_target_properties(glfw
     IMPORTED_LOCATION 
     ${PROJECT_SOURCE_DIR}/libs/glfw/lib/libglfw.3.dylib)
 
-set(LINK_LIBS libs glfw)
+set(LINK_LIBS glad glfw stb_image)
 
 add_subdirectory(src)
 add_subdirectory(libs)
