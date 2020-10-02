@@ -1,10 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <math.h>
 #include "../utils/log.h"
 
-// https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/
-namespace hello_triangle
+namespace shaders
 {
     float vertices[] = {
         0.5f, 0.5f, 0.0f,   // 左上角
@@ -20,17 +20,21 @@ namespace hello_triangle
         #version 330 core
         layout (location = 0) in vec3 aPos;
         void main() {
-            gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+            gl_Position = vec4(aPos, 1.0);
         }
     )";
+
     constexpr const char *kFragShaderSource = R"(
         #version 330 core
         out vec4 FragColor;
+
+        uniform vec4 uColor;
+
         void main() {
-            FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+            FragColor = uColor;
         }
     )";
-    int helloTriangleImpl()
+    int shadersImpl()
     {
         LOG_I(__FILENAME__);
         glfwInit();
@@ -146,6 +150,10 @@ namespace hello_triangle
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
             glUseProgram(shaderProgram);
+            float timeValue = glfwGetTime();
+            float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+            int uColor = glGetUniformLocation(shaderProgram, "uColor");
+            glUniform4f(uColor, 0.0f, greenValue, 0.0f, 1.0f);
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
             glBindVertexArray(0);
@@ -157,12 +165,13 @@ namespace hello_triangle
         glfwTerminate();
         return 0;
     }
-} // namespace hello_triangle
+
+} // namespace shaders
 
 namespace getting_started
 {
-    void helloTriangle()
+    void shaders()
     {
-        hello_triangle::helloTriangleImpl();
+        shaders::shadersImpl();
     }
 } // namespace getting_started

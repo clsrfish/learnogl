@@ -5,7 +5,7 @@
 #include "../utils/log.h"
 
 // https://learnopengl-cn.github.io/01%20Getting%20started/03%20Hello%20Window
-namespace
+namespace hello_window
 {
     int qwe = 123;
     int helloWindowImpl()
@@ -62,11 +62,11 @@ namespace
         glfwTerminate();
         return 0;
     }
-} // namespace
+} // namespace hello_window
 namespace getting_started
 {
     void helloWindow()
     {
-        helloWindowImpl();
+        hello_window::helloWindowImpl();
     }
 } // namespace getting_started
