@@ -34,6 +34,10 @@ namespace
             glfwTerminate();
             return -1;
         }
+        else
+        {
+            LOG_I("GLVersion: %s GLVendor: %s", glGetString(GL_VERSION), glGetString(GL_VENDOR));
+        }
         glViewport(0, 0, 800, 600);
         glfwSetFramebufferSizeCallback(window, [](GLFWwindow *win, int width, int height) -> void {
             glViewport(0, 0, width, height);

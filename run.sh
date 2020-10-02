@@ -4,7 +4,7 @@ if [ ! -d build ]; then
     echo "-- Build directory not exists"
 fi
 
-cmake -S . -B build --log-level=VERBOSE -Wdev
+cmake --log-level=VERBOSE -Wdev -DCMAKE_BUILD_TYPE=Debug -S . -B build
 
 if [ $(uname) == "Linux" ]; then
     cpu_core=$(nproc)

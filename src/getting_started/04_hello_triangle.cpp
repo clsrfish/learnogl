@@ -7,9 +7,14 @@
 namespace
 {
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f};
+        0.5f, 0.5f, 0.0f,   // 左上角
+        0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, -0.5f, 0.0f, // 左下角
+        -0.5f, 0.5f, 0.0f}; // 左上角
+
+    unsigned short indices[] = {
+        0, 1, 3,  // 第一个三角形
+        1, 2, 3}; // 第二个三角形
 
     constexpr const char *kVertexShaderSource = R"(
         #version 330 core
@@ -27,9 +32,7 @@ namespace
     )";
     int helloTriangleImpl()
     {
-        // LOG_I(__FILENAME__);
-        string_format("hahah:%s", "test");
-        // LOG_I("hahah:%s", "test");
+        LOG_I(__FILENAME__);
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -52,6 +55,10 @@ namespace
             glfwTerminate();
             return -1;
         }
+        else
+        {
+            LOG_I("GLVersion: %s GLVendor: %s", glGetString(GL_VERSION), glGetString(GL_VENDOR));
+        }
         glViewport(0, 0, 800, 600);
         glfwSetFramebufferSizeCallback(window, [](GLFWwindow *, int w, int h) -> void {
             glViewport(0, 0, w, h);
@@ -60,6 +67,11 @@ namespace
         unsigned int VAO;
         glGenVertexArrays(1, &VAO);
         glBindVertexArray(VAO);
+
+        unsigned int EBO;
+        glGenBuffers(1, &EBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
         unsigned int VBO;
         glGenBuffers(1, &VBO);
@@ -70,6 +82,7 @@ namespace
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         // init vertex shader
         unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -134,7 +147,8 @@ namespace
 
             glUseProgram(shaderProgram);
             glBindVertexArray(VAO);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+            glBindVertexArray(0);
 
             glfwSwapBuffers(window);
             glfwPollEvents();
