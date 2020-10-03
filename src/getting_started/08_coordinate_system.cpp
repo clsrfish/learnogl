@@ -11,16 +11,54 @@
 namespace coordinate_system
 {
     float vertices[] = {
-        //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // 右上
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // 右下
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // 左下
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f   // 左上
-    };
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
 
     unsigned short indices[] = {
         0, 1, 3,  // 第一个三角形
         1, 2, 3}; // 第二个三角形
+
+    int screenWidth = 800;
+    int screenHeight = 600;
 
     int coordinateSystemImpl()
     {
@@ -32,7 +70,7 @@ namespace coordinate_system
 #if defined(__APPLE__)
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #endif
-        GLFWwindow *window = glfwCreateWindow(800, 600, __FILENAME__, nullptr, nullptr);
+        GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, __FILENAME__, nullptr, nullptr);
         if (window == nullptr)
         {
             LOG_E("Failed to create GLFW window");
@@ -50,8 +88,10 @@ namespace coordinate_system
         {
             printGLInfo();
         }
-        glViewport(0, 0, 800, 600);
+        glViewport(0, 0, screenWidth, screenHeight);
         glfwSetFramebufferSizeCallback(window, [](GLFWwindow *, int w, int h) {
+            screenWidth = w;
+            screenHeight = h;
             glViewport(0, 0, w, h);
         });
 
@@ -117,6 +157,18 @@ namespace coordinate_system
 
         auto shader = new Shader("shaders/getting_started/08/shader.vs", "shaders/getting_started/08/shader.fs");
 
+        glm::vec3 cubePositions[] = {
+            glm::vec3(0.0f, 0.0f, 0.0f),
+            glm::vec3(2.0f, 5.0f, -15.0f),
+            glm::vec3(-1.5f, -2.2f, -2.5f),
+            glm::vec3(-3.8f, -2.0f, -12.3f),
+            glm::vec3(2.4f, -0.4f, -3.5f),
+            glm::vec3(-1.7f, 3.0f, -7.5f),
+            glm::vec3(1.3f, -2.0f, -2.5f),
+            glm::vec3(1.5f, 2.0f, -2.5f),
+            glm::vec3(1.5f, 0.2f, -1.5f),
+            glm::vec3(-1.3f, 1.0f, -1.5f)};
+
         while (!glfwWindowShouldClose(window))
         {
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -127,7 +179,7 @@ namespace coordinate_system
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
+            glEnable(GL_DEPTH_TEST);
             if (!shader->Use())
             {
                 break;
@@ -139,19 +191,23 @@ namespace coordinate_system
             shader->SetInt("texture0", 0);
             shader->SetInt("texture1", 1);
 
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            glBindVertexArray(VAO);
             glm::mat4 view = glm::mat4(1.0f);
             view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
             glm::mat4 projection = glm::mat4(1.0f);
-            projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-            shader->SetMatrix4("uModel", glm::value_ptr(model));
+            projection = glm::perspective(glm::radians(45.0f), static_cast<float>(screenWidth) / screenHeight, 0.1f, 100.0f);
             shader->SetMatrix4("uView", glm::value_ptr(view));
             shader->SetMatrix4("uProjection", glm::value_ptr(projection));
+            for (unsigned int i = 0; i < 10; i++)
+            {
+                glm::mat4 model = glm::mat4(1.0f);
+                model = glm::translate(model, cubePositions[i]);
+                model = glm::rotate(model, glm::radians(20.0f * i), glm::vec3(1.0f, 0.0f, 0.0f));
 
-            glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void *)0);
+                shader->SetMatrix4("uModel", glm::value_ptr(model));
+
+                glDrawArrays(GL_TRIANGLES, 0, 36);
+            }
 
             glfwSwapBuffers(window);
             glfwPollEvents();
