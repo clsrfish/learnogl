@@ -1,8 +1,8 @@
 {
     "files.associations": {
-        "*.h.in": "plaintext",
         "*.ttml": "xml",
         "*.ttss": "css",
+        "*.h.in": "plaintext",
         "vector": "cpp",
         "iterator": "cpp",
         "algorithm": "cpp",
@@ -69,6 +69,10 @@
         "unordered_map": "cpp",
         "__functional_03": "cpp",
         "memory_resource": "cpp",
-        "*.in": "cpp"
+        "*.in": "cpp",
+        "filesystem": "cpp",
+        "deque": "cpp",
+        "iomanip": "cpp",
+        "stack": "cpp"
     }
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 
 #if !defined(LOG_H)
@@ -48,14 +49,18 @@ std::string string_format(const std::string &format, Args... args)
     snprintf(buf.get(), size, format.c_str(), args...);
     return std::string(buf.get(), buf.get() + size - 1); // We don't want the '\0' inside
 }
+#define WIDTH 4
 
 #define LOG_I(FORMAT, ...) \
-    std::cout << BOLDGREEN << "[INFO] " << GREEN << string_format(FORMAT, ##__VA_ARGS__) << RESET << std::endl;
+    std::cout << BOLDGREEN << std::left << std::setw(WIDTH) << std::setfill(' ') << "[I]" << RESET << GREEN << string_format(FORMAT, ##__VA_ARGS__) << RESET << std::endl;
 
 #define LOG_D(FORMAT, ...) \
-    std::cout << BOLDBLUE << "[DEBUG] " << BLUE << string_format(FORMAT, ##__VA_ARGS__) << RESET << std::endl;
+    std::cout << BOLDBLUE << std::left << std::setw(WIDTH) << std::setfill(' ') << "[D]" << RESET << BLUE << string_format(FORMAT, ##__VA_ARGS__) << RESET << std::endl;
+
+#define LOG_W(FORMAT, ...) \
+    std::cout << BOLDYELLOW << std::left << std::setw(WIDTH) << std::setfill(' ') << "[W]" << RESET << YELLOW << string_format(FORMAT, ##__VA_ARGS__) << RESET << std::endl;
 
 #define LOG_E(FORMAT, ...) \
-    std::cout << BOLDRED << "[ERROR] " << RED << string_format(FORMAT, ##__VA_ARGS__) << RESET << std::endl;
+    std::cerr << BOLDRED << std::left << std::setw(WIDTH) << std::setfill(' ') << "[E]" << RESET << RED << string_format(FORMAT, ##__VA_ARGS__) << RESET << std::endl;
 
 #endif // LOG_H

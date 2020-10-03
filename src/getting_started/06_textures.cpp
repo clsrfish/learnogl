@@ -2,7 +2,9 @@
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
 #include <iostream>
+#include "../gl/shader.h"
 #include "../utils/log.h"
+#include "../gl/gl_utils.h"
 
 namespace textures
 {
@@ -18,35 +20,6 @@ namespace textures
         0, 1, 3,  // 第一个三角形
         1, 2, 3}; // 第二个三角形
 
-    constexpr const char *kVertexShaderSource = R"(
-        #version 330 core
-        layout (location = 0) in vec3 aPos;
-        layout (location = 1) in vec3 aColor;
-        layout (location = 2) in vec2 aTexCoord;
-
-        out vec3 color;
-        out vec2 texCoord;
-        void main() {
-            gl_Position = vec4(aPos, 1.0);
-            color = aColor;
-            texCoord = aTexCoord;
-        }
-    )";
-
-    constexpr const char *kFragShaderSource = R"(
-        #version 330 core
-
-        in vec3 color;
-        in vec2 texCoord;
-        uniform sampler2D texture0;
-        uniform sampler2D texture1;
-
-        out vec4 FragColor;
-
-        void main() {
-            FragColor = mix(texture(texture0, texCoord), texture(texture1, texCoord), 0.2);
-        }
-    )";
     int texturesImpl()
     {
         LOG_I(__FILENAME__);
@@ -55,6 +28,7 @@ namespace textures
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #if defined(__APPLE__)
+        LOG_D("Running on macOS, enable forward compatibilty.");
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #endif
         GLFWwindow *window = glfwCreateWindow(800, 600, __FILENAME__, nullptr, nullptr);
@@ -70,6 +44,10 @@ namespace textures
             LOG_E("Failed to initialize GLAD");
             glfwTerminate();
             return -1;
+        }
+        else
+        {
+            printGLInfo();
         }
         glViewport(0, 0, 800, 600);
         glfwSetFramebufferSizeCallback(window, [](GLFWwindow *, int w, int h) {
@@ -100,56 +78,8 @@ namespace textures
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        // init vertex shader
-        unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &kVertexShaderSource, nullptr);
-        glCompileShader(vertexShader);
-        int compileStatus;
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &compileStatus);
-        if (compileStatus <= 0)
-        {
-            int infoLength;
-            glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &infoLength);
-            char *logBuffer = new char[infoLength];
-            glGetShaderInfoLog(vertexShader, infoLength, nullptr, logBuffer);
-            LOG_E("ERROR::SHADER::VERTEX::COMPILATION_FAILED::%s", logBuffer);
-            glfwTerminate();
-            return -1;
-        }
-
-        unsigned int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragShader, 1, &kFragShaderSource, nullptr);
-        glCompileShader(fragShader);
-        glGetShaderiv(fragShader, GL_COMPILE_STATUS, &compileStatus);
-        if (compileStatus <= 0)
-        {
-            int infoLength;
-            glGetShaderiv(fragShader, GL_INFO_LOG_LENGTH, &infoLength);
-            char *logBuffer = new char[infoLength];
-            glGetShaderInfoLog(fragShader, infoLength, nullptr, logBuffer);
-            LOG_E("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED::%s", logBuffer);
-            glfwTerminate();
-            return -1;
-        }
-
-        unsigned int shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexShader);
-        glAttachShader(shaderProgram, fragShader);
-        glLinkProgram(shaderProgram);
-        int linkStatus;
-        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linkStatus);
-        if (linkStatus <= 0)
-        {
-            int infoLength;
-            glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &infoLength);
-            char *logBuffer = new char[infoLength];
-            glGetProgramInfoLog(shaderProgram, infoLength, nullptr, logBuffer);
-            LOG_E("ERROR::PROGRAM::LINK_FAILED::%s", logBuffer);
-            glfwTerminate();
-            return -1;
-        }
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragShader);
+        const char *src = nullptr;
+        Shader *shader = new Shader("shaders/getting_started/06/shader.vs", "shaders/getting_started/06/shader.fs");
 
         stbi_set_flip_vertically_on_load(1);
         unsigned int containerTexture;
@@ -202,15 +132,17 @@ namespace textures
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-            glUseProgram(shaderProgram);
+            if (!shader->Use())
+            {
+                break;
+            }
+
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, containerTexture);
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, faceTexture);
-            auto texture0 = glGetUniformLocation(shaderProgram, "texture0");
-            glUniform1i(texture0, 0);
-            auto texture1 = glGetUniformLocation(shaderProgram, "texture1");
-            glUniform1i(texture1, 1);
+            shader->SetInt("texture0", 0);
+            shader->SetInt("texture1", 1);
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void *)0);
 
