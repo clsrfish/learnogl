@@ -1,4 +1,4 @@
-# cpp
+# Learn OpenGL practice
 
 ## Quick Start Guide
 
