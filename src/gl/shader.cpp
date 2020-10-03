@@ -107,3 +107,12 @@ void Shader::SetFloat(const std::string &name, float value) const
         glUniform1f(loc, value);
     }
 }
+
+void Shader::SetMatrix4(const std::string &name, float *matrix) const
+{
+    auto loc = GetUniformLocation(name);
+    if (loc != -1)
+    {
+        glUniformMatrix4fv(loc, 1, GL_FALSE, matrix);
+    }
+}
