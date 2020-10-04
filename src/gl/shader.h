@@ -1,9 +1,9 @@
+#if !defined(SHADER_H)
+#define SHADER_H
+
 #include <glad/glad.h>
 #include <iostream>
 #include "../utils/log.h"
-
-#if !defined(SHADER_H)
-#define SHADER_H
 
 class Shader
 {

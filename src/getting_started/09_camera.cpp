@@ -6,6 +6,7 @@
 #include <stb_image.h>
 #include <algorithm>
 #include "../gl/shader.h"
+#include "../gl/camera.h"
 #include "../utils/log.h"
 #include "../gl/gl_utils.h"
 
@@ -61,9 +62,7 @@ namespace camera
     int screenWidth = 800;
     int screenHeight = 600;
 
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    Camera camera;
 
     float lastFrameTime = -1.0f;
 
@@ -81,30 +80,27 @@ namespace camera
         }
         float deltaTime = currentFrameTime - lastFrameTime;
         lastFrameTime = currentFrameTime;
-        float cameraSpeed = 2.5f * deltaTime;
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            cameraPos += cameraSpeed * cameraFront;
+            camera.ProcessKeyboard(FORWARD, deltaTime);
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            cameraPos -= cameraSpeed * cameraFront;
+            camera.ProcessKeyboard(BACKWARD, deltaTime);
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            cameraPos -= cameraSpeed * glm::normalize(glm::cross(cameraFront, cameraUp));
+            camera.ProcessKeyboard(LEFT, deltaTime);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            cameraPos += cameraSpeed * glm::normalize(glm::cross(cameraFront, cameraUp));
+            camera.ProcessKeyboard(RIGHT, deltaTime);
         }
     }
 
     bool firstMove = false;
     float lastCursorX = 0.0f;
     float lastCursorY = 0.0f;
-    float pitch = 0.0f;
-    float yaw = -90.0f;
 
     void processCursorMove(GLFWwindow *window, double x, double y)
     {
@@ -121,36 +117,12 @@ namespace camera
         float offsetY = lastCursorY - y;
         lastCursorX = x;
         lastCursorY = y;
-
-        offsetX *= 0.05f;
-        offsetY *= 0.05f;
-
-        yaw += offsetX;
-        pitch += offsetY;
-
-        pitch = std::max(-89.9f, pitch);
-        pitch = std::min(89.9f, pitch);
-
-        // new cameraFront
-        glm::vec3 front;
-        front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-        front.y = sin(glm::radians(pitch));
-        front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-        cameraFront = glm::normalize(front);
+        camera.ProcessMouseMovement(offsetX, offsetY);
     }
 
-    constexpr float MIN_FOV = 1.0f;
-    constexpr float MAX_FOV = 60.0f;
-    float fov = 45.0f;
     void processMouseScroll(GLFWwindow *window, double x, double y)
     {
-        LOG_I("Mouse scrolling: fov=%.3f y=%.3f", fov, y);
-        if (fov >= MIN_FOV && fov <= MAX_FOV)
-        {
-            fov -= y;
-        }
-        fov = std::max(MIN_FOV, fov);
-        fov = std::min(MAX_FOV, fov);
+        camera.ProcessMouseScroll(y);
     }
 
     int cameraImpl()
@@ -284,10 +256,9 @@ namespace camera
             shader->SetInt("texture1", 1);
 
             glBindVertexArray(VAO);
-            glm::mat4 view = glm::mat4(1.0f);
-            view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+            glm::mat4 view = camera.GetViewMatrix();
             glm::mat4 projection = glm::mat4(1.0f);
-            projection = glm::perspective(glm::radians(fov), static_cast<float>(screenWidth) / screenHeight, 0.1f, 100.0f);
+            projection = glm::perspective(glm::radians(camera.Zoom), static_cast<float>(screenWidth) / screenHeight, 0.1f, 100.0f);
             shader->SetMatrix4("uView", glm::value_ptr(view));
             shader->SetMatrix4("uProjection", glm::value_ptr(projection));
             for (unsigned int i = 0; i < 10; i++)
