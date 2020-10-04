@@ -3,6 +3,9 @@
 if [ ! -d build ]; then
     echo "-- Build directory not exists"
 fi
+if [ -f ./build/main ]; then
+    rm ./build/main
+fi
 
 cmake --log-level=VERBOSE -Wdev -DCMAKE_BUILD_TYPE=Debug -S . -B build
 

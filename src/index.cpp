@@ -6,6 +6,7 @@
 #include "./getting_started/06_textures.cpp"
 #include "./getting_started/07_transforms.cpp"
 #include "./getting_started/08_coordinate_system.cpp"
+#include "./getting_started/09_camera.cpp"
 
 void index()
 {
@@ -14,5 +15,6 @@ void index()
     // getting_started::shaders();
     // getting_started::textures();
     // getting_started::transforms();
-    getting_started::coordinateSystem();
+    // getting_started::coordinateSystem();
+    getting_started::camera();
 }
