@@ -10,11 +10,11 @@
 
 void index()
 {
-    // getting_started::helloWindow();
-    // getting_started::helloTriangle();
-    // getting_started::shaders();
-    // getting_started::textures();
-    // getting_started::transforms();
-    // getting_started::coordinateSystem();
-    getting_started::camera();
+    // getting_started::hello_window::main();
+    // getting_started::hello_triangle::main();
+    // getting_started::shaders::main();
+    // getting_started::textures::main();
+    // getting_started::transforms::main();
+    // getting_started::coordinate_system::main();
+    getting_started::camera::main();
 }
