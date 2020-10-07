@@ -1,8 +1,11 @@
-add_subdirectory(getting_started)
-add_subdirectory(gl)
-add_subdirectory(utils)
+set(SUB_DIRS getting_started gl lighting utils)
 
-aux_source_directory(. DIR_LIB_SRC)
+foreach (DIR IN LISTS SUB_DIRS)
+    message("Adding sub-directory: ${DIR}")
+    add_subdirectory(${DIR})
+endforeach ()
 
-add_library (src ${DIR_LIB_SRC})
-target_link_libraries(src getting_started gl utils)
+aux_source_directory(. SRC)
+
+add_library (src ${SRC})
+target_link_libraries(src ${SUB_DIRS})

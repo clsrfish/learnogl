@@ -116,3 +116,12 @@ void Shader::SetMatrix4(const std::string &name, float *matrix) const
         glUniformMatrix4fv(loc, 1, GL_FALSE, matrix);
     }
 }
+
+void Shader::SetVec3(const std::string &name, float v0, float v1, float v2) const
+{
+    auto loc = GetUniformLocation(name);
+    if (loc != -1)
+    {
+        glUniform3f(loc, v0, v1, v2);
+    }
+}

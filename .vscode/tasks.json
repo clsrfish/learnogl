@@ -11,7 +11,7 @@
                 "reveal": "always",
                 "panel": "shared",
             },
-            "command": "cmake --log-level=VERBOSE -Wdev -DCMAKE_BUILD_TYPE=Debug -S . -B build && make -d -C build"
+            "command": "cmake --log-level=VERBOSE -Wdev -DCMAKE_BUILD_TYPE=Debug -S . -B build && make -C build"
         },
         {
             "label": "dependencies",
