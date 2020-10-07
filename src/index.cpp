@@ -8,6 +8,7 @@
 #include "./getting_started/08_coordinate_system.cpp"
 #include "./getting_started/09_camera.cpp"
 #include "./lighting/01_colors.cpp"
+#include "./lighting/02_basic_lighting.cpp"
 
 void index()
 {
@@ -18,5 +19,6 @@ void index()
     // getting_started::transforms::main();
     // getting_started::coordinate_system::main();
     // getting_started::camera::main();
-    lighting::colors::main();
+    // lighting::colors::main();
+    lighting::basic_lighting::main();
 }
