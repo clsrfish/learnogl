@@ -11,6 +11,7 @@
 #include "./lighting/02_basic_lighting.cpp"
 #include "./lighting/03_materials.cpp"
 #include "./lighting/04_lighting_maps.cpp"
+#include "./lighting/05_light_caster.cpp"
 
 void index()
 {
@@ -24,5 +25,6 @@ void index()
     // lighting::colors::main();
     // lighting::basic_lighting::main();
     // lighting::materials::main();
-    lighting::lighting_maps::main();
+    // lighting::lighting_maps::main();
+    lighting::light_caster::main();
 }
