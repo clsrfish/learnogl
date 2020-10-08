@@ -1,5 +1,6 @@
 #include "./shader.h"
 #include "../utils/file.h"
+#include "../utils/log.h"
 
 Shader::Shader(const std::string &vsPath, const std::string &fsPath)
     : program(0)
@@ -76,9 +77,16 @@ int Shader::GetUniformLocation(const std::string &name) const
     glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
     if (currentProgram != program)
     {
+        LOG_E("Current shader program is not the same as this one");
         return -1;
     }
-    return glGetUniformLocation(program, name.c_str());
+    auto loc = glGetUniformLocation(program, name.c_str());
+    if (loc == -1)
+    {
+        // LOG_E("Uniform[%s] not found", name.c_str());
+    }
+
+    return loc;
 }
 
 void Shader::SetBool(const std::string &name, bool value) const
