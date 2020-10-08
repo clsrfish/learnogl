@@ -17,6 +17,7 @@
 #include "../utils/log.h"
 #include "../gl/gl_utils.h"
 
+// https://learnopengl-cn.github.io/02%20Lighting/05%20Light%20casters/
 namespace lighting
 {
     namespace light_caster
@@ -279,15 +280,17 @@ namespace lighting
                     cubeShader->SetVec3("u_Material.specular", 0.5f, 0.5f, 0.5f);
                     cubeShader->SetFloat("u_Material.shineness", 32.0f);
 
-                    cubeShader->SetVec3("u_Light.direction", -0.2f, -1.0f, -0.3f);
+                    cubeShader->SetVec3("u_Light.position", lightPos.x, lightPos.y, lightPos.z);
                     glm::vec3 diffuseColor = glm::vec3(0.5f);
                     glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
                     cubeShader->SetVec3("u_Light.ambient", ambientColor.r, ambientColor.g, ambientColor.b);
                     cubeShader->SetVec3("u_Light.diffuse", diffuseColor.x, diffuseColor.y, diffuseColor.z);
                     cubeShader->SetVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
+                    cubeShader->SetFloat("u_Light.constant", 1.0f);
+                    cubeShader->SetFloat("u_Light.linear", 0.09f);
+                    cubeShader->SetFloat("u_Light.quadratic", 0.032f);
                     for (size_t i = 0; i < 10; i++)
                     {
-
                         glm::mat4 model = glm::mat4(1.0f);
                         model = glm::translate(model, cubePositions[i]);
                         float angle = 20.0f * i;
