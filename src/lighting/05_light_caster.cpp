@@ -280,7 +280,10 @@ namespace lighting
                     cubeShader->SetVec3("u_Material.specular", 0.5f, 0.5f, 0.5f);
                     cubeShader->SetFloat("u_Material.shineness", 32.0f);
 
-                    cubeShader->SetVec3("u_Light.position", lightPos.x, lightPos.y, lightPos.z);
+                    cubeShader->SetVec3("u_Light.direction", camera.Front.x, camera.Front.y, camera.Front.z);
+                    cubeShader->SetVec3("u_Light.position", camera.Position.x, camera.Position.y, camera.Position.z);
+                    cubeShader->SetFloat("u_Light.cutOff", glm::cos(glm::radians(12.5f)));
+                    cubeShader->SetFloat("u_Light.outerCutOff", glm::cos(glm::radians(17.5f)));
                     glm::vec3 diffuseColor = glm::vec3(0.5f);
                     glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
                     cubeShader->SetVec3("u_Light.ambient", ambientColor.r, ambientColor.g, ambientColor.b);
