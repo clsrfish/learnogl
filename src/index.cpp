@@ -9,6 +9,7 @@
 #include "./getting_started/09_camera.cpp"
 #include "./lighting/01_colors.cpp"
 #include "./lighting/02_basic_lighting.cpp"
+#include "./lighting/03_materials.cpp"
 
 void index()
 {
@@ -20,5 +21,6 @@ void index()
     // getting_started::coordinate_system::main();
     // getting_started::camera::main();
     // lighting::colors::main();
-    lighting::basic_lighting::main();
+    // lighting::basic_lighting::main();
+    lighting::materials::main();
 }

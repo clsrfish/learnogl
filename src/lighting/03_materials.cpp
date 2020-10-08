@@ -1,7 +1,7 @@
 //
-//  01_basic_lighting.cpp
+//  03_materials.cpp
 //
-//  Created by Clsrfish on 07/10/2020
+//  Created by Clsrfish on 08/10/2020
 //
 
 #include <iostream>
@@ -17,7 +17,7 @@
 
 namespace lighting
 {
-    namespace basic_lighting
+    namespace materials
     {
         float vertices[] = {
             -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
@@ -190,8 +190,8 @@ namespace lighting
             glBindVertexArray(0);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-            Shader *cubeShader = new Shader("shaders/lighting/02/cube.vs", "shaders/lighting/02/cube.fs");
-            Shader *lightShader = new Shader("shaders/lighting/02/light.vs", "shaders/lighting/02/light.fs");
+            Shader *cubeShader = new Shader("shaders/lighting/03/cube.vs", "shaders/lighting/03/cube.fs");
+            Shader *lightShader = new Shader("shaders/lighting/03/light.vs", "shaders/lighting/03/light.fs");
             glfwSwapInterval(1);
             while (!glfwWindowShouldClose(window))
             {
@@ -210,10 +210,23 @@ namespace lighting
                     cubeShader->SetMatrix4("u_Model", glm::value_ptr(model));
                     cubeShader->SetMatrix4("u_View", glm::value_ptr(view));
                     cubeShader->SetMatrix4("u_Projection", glm::value_ptr(projection));
-                    cubeShader->SetVec3("u_CubeColor", 1.0f, 0.5f, 0.31f);
-                    cubeShader->SetVec3("u_LightColor", 1.0f, 1.0f, 1.0f);
-                    cubeShader->SetVec3("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
                     cubeShader->SetVec3("u_ViewPos", camera.Position.x, camera.Position.y, camera.Position.z);
+                    cubeShader->SetVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f);
+                    cubeShader->SetVec3("u_Material.diffuse", 1.0f, 0.5f, 0.31f);
+                    cubeShader->SetVec3("u_Material.specular", 0.5f, 0.5f, 0.5f);
+                    cubeShader->SetFloat("u_Material.shineness", 32.0f);
+                    cubeShader->SetVec3("u_Light.pos", lightPos.x, lightPos.y, lightPos.z);
+
+                    glm::vec3 lightColor;
+                    lightColor.x = sin(glfwGetTime() * 2.0f);
+                    lightColor.y = sin(glfwGetTime() * 0.7f);
+                    lightColor.z = sin(glfwGetTime() * 1.3f);
+                    glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+                    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+                    cubeShader->SetVec3("u_Light.ambient", ambientColor.r, ambientColor.g, ambientColor.b);
+                    cubeShader->SetVec3("u_Light.diffuse", diffuseColor.x, diffuseColor.y, diffuseColor.z);
+                    cubeShader->SetVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
                     glDrawArrays(GL_TRIANGLES, 0, 36);
                 }
                 else
@@ -242,5 +255,5 @@ namespace lighting
             glfwTerminate();
             return 0;
         }
-    } // namespace basic_lighting
+    } // namespace materials
 } // namespace lighting
