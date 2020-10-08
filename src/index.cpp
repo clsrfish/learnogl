@@ -10,6 +10,7 @@
 #include "./lighting/01_colors.cpp"
 #include "./lighting/02_basic_lighting.cpp"
 #include "./lighting/03_materials.cpp"
+#include "./lighting/04_lighting_maps.cpp"
 
 void index()
 {
@@ -22,5 +23,6 @@ void index()
     // getting_started::camera::main();
     // lighting::colors::main();
     // lighting::basic_lighting::main();
-    lighting::materials::main();
+    // lighting::materials::main();
+    lighting::lighting_maps::main();
 }
