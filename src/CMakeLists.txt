@@ -1,4 +1,4 @@
-set(SUB_DIRS getting_started gl lighting utils)
+set(SUB_DIRS getting_started gl lighting model_loading utils)
 
 foreach (DIR IN LISTS SUB_DIRS)
     message("Adding sub-directory: ${DIR}")

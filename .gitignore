@@ -1,3 +1,11 @@
 *.DS_Store
 build/*
 !build/.gitkeep
+
+libs/assimp/lib/*
+!libs/assimp/lib/.gitkeep
+libs/assimp/include/*
+!libs/assimp/include/.gitkeep
+
+assets/nanosuit/*
+!assets/nanosuit/.gitkeep

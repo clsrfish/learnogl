@@ -73,6 +73,9 @@
         "filesystem": "cpp",
         "deque": "cpp",
         "iomanip": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "list": "cpp",
+        "set": "cpp",
+        "__memory": "cpp"
     }
 }

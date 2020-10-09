@@ -13,6 +13,7 @@
 #include "./lighting/04_lighting_maps.cpp"
 #include "./lighting/05_light_caster.cpp"
 #include "./lighting/06_multiple_lights.cpp"
+#include "./model_loading/03_model.cpp"
 
 void index()
 {
@@ -28,5 +29,6 @@ void index()
     // lighting::materials::main();
     // lighting::lighting_maps::main();
     // lighting::light_caster::main();
-    lighting::multiple_lights::main();
+    // lighting::multiple_lights::main();
+    model_loading::model::main();
 }

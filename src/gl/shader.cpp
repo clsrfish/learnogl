@@ -83,9 +83,8 @@ int Shader::GetUniformLocation(const std::string &name) const
     auto loc = glGetUniformLocation(program, name.c_str());
     if (loc == -1)
     {
-        // LOG_E("Uniform[%s] not found", name.c_str());
+        LOG_W("Uniform[%s] not found", name.c_str());
     }
-
     return loc;
 }
 

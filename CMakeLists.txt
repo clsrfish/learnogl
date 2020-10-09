@@ -18,6 +18,7 @@ ENDIF ()
 include_directories(
     /usr/local/include
     ${PROJECT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}/libs/assimp/include 
     ${PROJECT_SOURCE_DIR}/libs/glad/include 
     ${PROJECT_SOURCE_DIR}/libs/glfw/include
     ${PROJECT_SOURCE_DIR}/libs/glm/include
@@ -37,7 +38,23 @@ set_target_properties(glfw
     IMPORTED_LOCATION 
     ${PROJECT_SOURCE_DIR}/libs/glfw/lib/libglfw.3.dylib)
 
-set(LINK_LIBS glad glfw stb_image)
+# assimp lib
+add_library(assimp 
+    SHARED 
+    IMPORTED)
+set_target_properties(assimp 
+    PROPERTIES 
+    IMPORTED_LOCATION 
+    ${PROJECT_SOURCE_DIR}/libs/assimp/lib/libassimp.5.dylib)
+# add_library(irrxml 
+#     SHARED 
+#     IMPORTED)
+# set_target_properties(irrxml 
+#     PROPERTIES 
+#     IMPORTED_LOCATION 
+#     ${PROJECT_SOURCE_DIR}/libs/assimp/lib/libIrrXML.dylib)
+
+set(LINK_LIBS assimp glad glfw stb_image)
 
 add_subdirectory(src)
 add_subdirectory(libs)
