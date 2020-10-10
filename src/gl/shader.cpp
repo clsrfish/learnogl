@@ -115,7 +115,7 @@ void Shader::SetFloat(const std::string &name, float value) const
     }
 }
 
-void Shader::SetMatrix4(const std::string &name, float *matrix) const
+void Shader::SetMatrix4(const std::string &name, const float *matrix) const
 {
     auto loc = GetUniformLocation(name);
     if (loc != -1)

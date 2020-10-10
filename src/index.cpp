@@ -14,6 +14,7 @@
 #include "./lighting/05_light_caster.cpp"
 #include "./lighting/06_multiple_lights.cpp"
 #include "./model_loading/03_model.cpp"
+#include "./advanced_ogl/01_depth_testing.cpp"
 
 void index()
 {
@@ -30,5 +31,6 @@ void index()
     // lighting::lighting_maps::main();
     // lighting::light_caster::main();
     // lighting::multiple_lights::main();
-    model_loading::model::main();
+    // model_loading::model::main();
+    advanced_ogl::depth_testing::main();
 }

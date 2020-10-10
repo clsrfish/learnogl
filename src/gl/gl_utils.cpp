@@ -17,6 +17,11 @@ unsigned int TextureFromFile(const std::string &file, const std::string &directo
     ss << directory << '/' << file;
     std::string filepath = ss.str();
 
+    return TextureFromFile(filepath);
+}
+
+unsigned int TextureFromFile(const std::string &filepath)
+{
     unsigned int textureID;
     glGenTextures(1, &textureID);
 
