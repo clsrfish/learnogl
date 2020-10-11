@@ -76,7 +76,6 @@ namespace advanced_ogl
             glEnableVertexAttribArray(0);
             glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void *)(3 * sizeof(float)));
             glEnableVertexAttribArray(1);
-            glBindVertexArray(0);
 
             // translations
             glm::vec2 translations[100];
@@ -92,13 +91,18 @@ namespace advanced_ogl
                     translations[index++] = translation;
                 }
             }
+            unsigned int offsetVBO;
+            glGenBuffers(1, &offsetVBO);
+            glBindBuffer(GL_ARRAY_BUFFER, offsetVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void *)(0));
+            glEnableVertexAttribArray(2);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glVertexAttribDivisor(2, 1); // the 2nd attribute update every 1 draw call
+
+            glBindVertexArray(0);
 
             Shader quadShader("shaders/advanced_gl/10/instance.vs", "shaders/advanced_gl/10/instance.fs");
-            quadShader.Use();
-            for (unsigned int i = 0; i < 100; i++)
-            {
-                quadShader.SetVec2("offsets[" + std::to_string(i) + "]", translations[i].x, translations[i].y);
-            }
 
             while (!glfwWindowShouldClose(window))
             {
