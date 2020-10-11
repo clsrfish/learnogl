@@ -6,11 +6,11 @@ out vec4 FragColor;
 
 uniform sampler2D u_Texture;
 
-void main(){
-    vec4 texColor=texture(u_Texture,TexCoords);
+void main() {
+    vec4 texColor = texture(u_Texture, TexCoords);
     // discard is unnecessary, if blending enabled
-    // if(texColor.a<.1){
+    // if (texColor.a < 0.1) {
         //     discard;
     // }
-    FragColor=texColor;
+    FragColor = texColor;
 }
