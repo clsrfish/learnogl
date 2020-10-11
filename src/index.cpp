@@ -16,6 +16,7 @@
 #include "./model_loading/03_model.cpp"
 #include "./advanced_ogl/01_depth_testing.cpp"
 #include "./advanced_ogl/02_stencil_testing.cpp"
+#include "./advanced_ogl/03_blending.cpp"
 
 void index()
 {
@@ -34,5 +35,6 @@ void index()
     // lighting::multiple_lights::main();
     // model_loading::model::main();
     // advanced_ogl::depth_testing::main();
-    advanced_ogl::stencil_testing::main();
+    // advanced_ogl::stencil_testing::main();
+    advanced_ogl::blending::main();
 }

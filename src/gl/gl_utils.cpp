@@ -31,11 +31,20 @@ unsigned int TextureFromFile(const std::string &filepath)
     {
         GLenum format;
         if (nrComponents == 1)
+        {
+            LOG_I("Tex format: RED - %s", filepath.c_str());
             format = GL_RED;
+        }
         else if (nrComponents == 3)
+        {
+            LOG_I("Tex format: RGB - %s", filepath.c_str());
             format = GL_RGB;
+        }
         else if (nrComponents == 4)
+        {
+            LOG_I("Tex format: RGBA - %s", filepath.c_str());
             format = GL_RGBA;
+        }
 
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
@@ -45,6 +54,8 @@ unsigned int TextureFromFile(const std::string &filepath)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
     else
     {
