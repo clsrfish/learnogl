@@ -18,6 +18,7 @@
 #include "./advanced_ogl/02_stencil_testing.cpp"
 #include "./advanced_ogl/03_blending.cpp"
 #include "./advanced_ogl/04_face_culling.cpp"
+#include "./advanced_ogl/05_framebuffers.cpp"
 
 void index()
 {
@@ -38,5 +39,6 @@ void index()
     // advanced_ogl::depth_testing::main();
     // advanced_ogl::stencil_testing::main();
     // advanced_ogl::blending::main();
-    advanced_ogl::face_culling::main();
+    // advanced_ogl::face_culling::main();
+    advanced_ogl::framebuffers::main();
 }
