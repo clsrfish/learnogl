@@ -18,6 +18,7 @@ public:
     void SetInt(const std::string &name, int value) const;
     void SetFloat(const std::string &name, float value) const;
     void SetMatrix4(const std::string &name, const float *matrix) const;
+    void SetVec2(const std::string &name, float v0, float v1) const;
     void SetVec3(const std::string &name, float v0, float v1, float v2) const;
 
 private:

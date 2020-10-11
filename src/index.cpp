@@ -20,6 +20,7 @@
 #include "./advanced_ogl/04_face_culling.cpp"
 #include "./advanced_ogl/05_framebuffers.cpp"
 #include "./advanced_ogl/06_cubemaps.cpp"
+#include "./advanced_ogl/10_instancing.cpp"
 
 void index()
 {
@@ -42,5 +43,6 @@ void index()
     // advanced_ogl::blending::main();
     // advanced_ogl::face_culling::main();
     // advanced_ogl::framebuffers::main();
-    advanced_ogl::cubemaps::main();
+    // advanced_ogl::cubemaps::main();
+    advanced_ogl::instancing::main();
 }

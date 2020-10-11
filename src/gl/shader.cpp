@@ -124,6 +124,15 @@ void Shader::SetMatrix4(const std::string &name, const float *matrix) const
     }
 }
 
+void Shader::SetVec2(const std::string &name, float v0, float v1) const
+{
+    auto loc = GetUniformLocation(name);
+    if (loc != -1)
+    {
+        glUniform2f(loc, v0, v1);
+    }
+}
+
 void Shader::SetVec3(const std::string &name, float v0, float v1, float v2) const
 {
     auto loc = GetUniformLocation(name);
