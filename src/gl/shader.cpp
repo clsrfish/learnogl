@@ -83,7 +83,17 @@ int Shader::GetUniformLocation(const std::string &name) const
     auto loc = glGetUniformLocation(program, name.c_str());
     if (loc == -1)
     {
-        LOG_W("Uniform[%s] not found", name.c_str());
+        // FIXME: log error once for a specific uniform
+        auto it = attribNotFoundRecords.find(name);
+        if (it == attribNotFoundRecords.end())
+        {
+            LOG_W("Uniform[%s] not found", name.c_str());
+            // attribNotFoundRecords[name] = 1;
+        }
+        else
+        {
+            // attribNotFoundRecords[name] = (*it).second + 1;
+        }
     }
     return loc;
 }

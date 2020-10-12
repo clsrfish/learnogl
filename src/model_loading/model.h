@@ -23,13 +23,14 @@ namespace model_loading
     class Model
     {
     public:
+        std::vector<Mesh> Meshes;
+        std::vector<Texture> loadedTextures;
+
         Model(const std::string &modelPath);
 
         void Draw(const Shader &shader);
 
     private:
-        std::vector<Texture> loadedTextures;
-        std::vector<Mesh> meshes;
         std::string directory;
 
         void loadModel(const std::string &modelPath);

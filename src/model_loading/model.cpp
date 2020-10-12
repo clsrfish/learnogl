@@ -13,9 +13,9 @@ model_loading::Model::Model(const std::string &modelPath)
 }
 void model_loading::Model::Draw(const Shader &shader)
 {
-    for (unsigned int i = 0; i < meshes.size(); i++)
+    for (unsigned int i = 0; i < Meshes.size(); i++)
     {
-        meshes[i].Draw(shader);
+        Meshes[i].Draw(shader);
     }
 }
 
@@ -39,7 +39,7 @@ void model_loading::Model::processNode(aiNode *node, const aiScene *scene)
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene));
+        Meshes.push_back(processMesh(mesh, scene));
     }
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {

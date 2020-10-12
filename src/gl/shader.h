@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <iostream>
+#include <map>
 #include "../utils/log.h"
 
 class Shader
@@ -23,7 +24,7 @@ public:
 
 private:
     unsigned int program;
-
+    std::map<std::string, int> attribNotFoundRecords;
     unsigned int CreateShader(GLenum shaderType, const std::string &shaderSource) const;
     int GetUniformLocation(const std::string &name) const;
 };
