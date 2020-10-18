@@ -21,7 +21,7 @@
 #include "./advanced_ogl/05_framebuffers.cpp"
 #include "./advanced_ogl/06_cubemaps.cpp"
 #include "./advanced_ogl/10_instancing.cpp"
-
+#include "./breakout/main.cpp"
 void index()
 {
     // getting_started::hello_window::main();
@@ -44,5 +44,6 @@ void index()
     // advanced_ogl::face_culling::main();
     // advanced_ogl::framebuffers::main();
     // advanced_ogl::cubemaps::main();
-    advanced_ogl::instancing::main();
+    // advanced_ogl::instancing::main();
+    breakout::main();
 }

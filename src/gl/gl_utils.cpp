@@ -96,3 +96,44 @@ unsigned int LoadCubeMapTexture(std::vector<std::string> faces)
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     return textureID;
 }
+
+std::string GLError2String(unsigned int error)
+{
+    switch (error)
+    {
+    case GL_NO_ERROR:
+        return "GL_NO_ERROR";
+    case GL_INVALID_ENUM:
+        return "GL_INVALID_ENUM";
+    case GL_INVALID_VALUE:
+        return "GL_INVALID_VALUE";
+    case GL_INVALID_OPERATION:
+        return "GL_INVALID_OPERATION";
+    case GL_STACK_OVERFLOW:
+        return "GL_STACK_OVERFLOW";
+    case GL_STACK_UNDERFLOW:
+        return "GL_STACK_UNDERFLOW";
+    case GL_OUT_OF_MEMORY:
+        return "GL_OUT_OF_MEMORY";
+    case GL_INVALID_FRAMEBUFFER_OPERATION:
+        return "GL_INVALID_FRAMEBUFFER_OPERATION";
+    default:
+        break;
+    }
+    return "";
+}
+
+GLChecker::GLChecker(const std::string &func, const std::string &filePath, unsigned int line)
+    : glFunc(func), sourceFile(filePath), sourceLine(line)
+{
+}
+
+GLChecker::~GLChecker()
+{
+    unsigned int errorCode;
+    while ((errorCode = glGetError()) != GL_NO_ERROR)
+    {
+        std::string errorStr = GLError2String(errorCode);
+        LOG_E("GL Error: %s \n%s:%d - %s", errorStr.c_str(), sourceFile.c_str(), sourceLine, glFunc.c_str());
+    }
+}

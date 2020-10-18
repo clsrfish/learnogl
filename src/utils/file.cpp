@@ -5,6 +5,11 @@
 
 std::string readFileStr(const std::string &filePath)
 {
+    if (filePath == "")
+    {
+        return "";
+    }
+
     std::ifstream ifs;
     // set which erro should be thrown
     ifs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
