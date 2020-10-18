@@ -8,6 +8,7 @@
 #include "./game_level.hpp"
 #include "./ball_object.hpp"
 #include "./particle.hpp"
+#include "./post_processor.hpp"
 
 // Represents the current state of the game
 
@@ -61,6 +62,8 @@ namespace breakout
         GameObject *player;
         BallObject *ball;
         ParticleEmmiter *ballParicles;
+        PostProcessor *postProcessor;
+        float startShakingTime;
 
         /** 
          * AABB-Circle collision detection

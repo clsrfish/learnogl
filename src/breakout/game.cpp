@@ -30,6 +30,7 @@ void breakout::Game::Init()
     GLClearError();
     breakout::Shader spriteShader = ResourceManager::LoadShader("shaders/breakout/sprite.vs", "shaders/breakout/sprite.fs", "", "sprite");
     breakout::Shader particleShader = ResourceManager::LoadShader("shaders/breakout/particle.vs", "shaders/breakout/particle.fs", "", "particle");
+    breakout::Shader postProcessShader = ResourceManager::LoadShader("shaders/breakout/postprocess.vs", "shaders/breakout/postprocess.fs", "", "postprocess");
 
     spriteShader.SetInteger("image", 0, true);
     spriteShader.SetMatrix4("projection", projection);
@@ -59,7 +60,7 @@ void breakout::Game::Init()
     this->Levels.push_back(two);
     this->Levels.push_back(three);
     this->Levels.push_back(four);
-    this->Level = 0;
+    this->Level = 1;
 
     // init player
     LOG_I("Initializing the player");
@@ -77,6 +78,9 @@ void breakout::Game::Init()
     LOG_I("Initializing the ball particles");
     GLClearError();
     this->ballParicles = new ParticleEmmiter(particleShader, particleTex, 500);
+
+    // init post processor
+    this->postProcessor = new PostProcessor(this->Width, this->Height, postProcessShader);
 }
 
 void breakout::Game::Update(float dt)
@@ -88,6 +92,10 @@ void breakout::Game::Update(float dt)
     {
         this->ResetLevel();
         this->ResetPlayer();
+    }
+    if (glfwGetTime() - this->startShakingTime >= 0.05f)
+    {
+        this->postProcessor->Shake = false;
     }
 }
 
@@ -131,6 +139,7 @@ void breakout::Game::Render()
 {
     if (this->State == GAME_ACTIVE)
     {
+        this->postProcessor->BeginRender();
         // draw background
         auto background = ResourceManager::GetTexture("background");
         this->renderer->DrawSprite(background, glm::vec2(0.0f), glm::vec2(this->Width, this->Height), 0.0f);
@@ -141,6 +150,8 @@ void breakout::Game::Render()
         // draw ball
         this->ballParicles->Draw();
         this->ball->Draw(*(this->renderer));
+        this->postProcessor->EndRender();
+        this->postProcessor->Render(glfwGetTime());
     }
 }
 
@@ -187,6 +198,11 @@ void breakout::Game::doCollisions()
         if (!obj.IsSolid)
         {
             obj.IsDestroyed = true;
+        }
+        else
+        {
+            this->postProcessor->Shake = true;
+            this->startShakingTime = glfwGetTime();
         }
         breakout::Direction dir = std::get<1>(collision);
         glm::vec2 diffVector = std::get<2>(collision);
