@@ -27,9 +27,12 @@ private:
     unsigned int sourceLine;
 };
 
+void GLClearError();
+
 #define GL_CHECK(glFunc)                              \
     [&]() {                                           \
         GLChecker check(#glFunc, __FILE__, __LINE__); \
         return glFunc;                                \
     }()
+
 #endif // GL_UTILS_H

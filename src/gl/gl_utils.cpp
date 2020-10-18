@@ -137,3 +137,8 @@ GLChecker::~GLChecker()
         LOG_E("GL Error: %s \n%s:%d - %s", errorStr.c_str(), sourceFile.c_str(), sourceLine, glFunc.c_str());
     }
 }
+
+void GLClearError()
+{
+    GLChecker check(__FUNCTION__, __FILE__, __LINE__);
+}

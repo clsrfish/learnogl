@@ -7,6 +7,7 @@
 #include "./game.hpp"
 #include "./resource_manager.hpp"
 #include "../utils/log.h"
+#include "../gl/gl_utils.h"
 
 const glm::vec2 PLAYER_SIZE = glm::vec2(100.0f, 25.0f);
 const float PLAYER_VELOCITY = 500.0f;
@@ -24,12 +25,19 @@ breakout::Game::~Game()
 
 void breakout::Game::Init()
 {
-    breakout::Shader shader = ResourceManager::LoadShader("shaders/breakout/sprite.vs", "shaders/breakout/sprite.fs", "", "sprite");
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width), static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
-    shader.SetInteger("image", 0, true);
-    shader.SetMatrix4("projection", projection);
+    // load shaders
+    GLClearError();
+    breakout::Shader spriteShader = ResourceManager::LoadShader("shaders/breakout/sprite.vs", "shaders/breakout/sprite.fs", "", "sprite");
+    breakout::Shader particleShader = ResourceManager::LoadShader("shaders/breakout/particle.vs", "shaders/breakout/particle.fs", "", "particle");
 
-    this->renderer = new breakout::SpriteRenderer(shader);
+    spriteShader.SetInteger("image", 0, true);
+    spriteShader.SetMatrix4("projection", projection);
+    particleShader.SetInteger("sprite", 0, true);
+    particleShader.SetMatrix4("projection", projection);
+    GLClearError();
+
+    this->renderer = new breakout::SpriteRenderer(spriteShader);
 
     // load textures
     ResourceManager::LoadTexture("assets/background.jpg", false, "background");
@@ -37,6 +45,7 @@ void breakout::Game::Init()
     ResourceManager::LoadTexture("assets/block.png", true, "block");
     ResourceManager::LoadTexture("assets/block_solid.png", true, "block_solid");
     ResourceManager::LoadTexture("assets/paddle.png", true, "paddle");
+    auto particleTex = ResourceManager::LoadTexture("assets/particle.png", true, "particle");
     // load levels
     GameLevel one;
     one.Load("assets/level/one.lvl", this->Width, this->Height / 2);
@@ -54,20 +63,26 @@ void breakout::Game::Init()
 
     // init player
     LOG_I("Initializing the player");
+    GLClearError();
     this->player = new breakout::GameObject(
         glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y),
         PLAYER_SIZE, ResourceManager::GetTexture("paddle"));
 
     // init ball
     LOG_I("Initializing the ball");
+    GLClearError();
     this->ball = new BallObject(
         this->player->Position + glm::vec2(PLAYER_SIZE.x / 2.0f - BALL_RADIUS, -BALL_RADIUS * 2.0f),
         BALL_RADIUS, BALL_INITIAL_VELOCITY, ResourceManager::GetTexture("ball"));
+    LOG_I("Initializing the ball particles");
+    GLClearError();
+    this->ballParicles = new ParticleEmmiter(particleShader, particleTex, 500);
 }
 
 void breakout::Game::Update(float dt)
 {
     this->ball->Move(dt, this->Width);
+    this->ballParicles->Update(dt, *(this->ball), 10, glm::vec2(this->ball->Radius));
     doCollisions();
     if (this->ball->Position.y >= this->Height + 100.0f)
     {
@@ -103,7 +118,10 @@ void breakout::Game::ProcessInput(float dt)
         }
         if (this->Keys[GLFW_KEY_SPACE])
         {
-            LOG_I("Fire the hole!");
+            if (this->ball->Stuck)
+            {
+                LOG_I("Fire the hole!");
+            }
             this->ball->Stuck = false;
         }
     }
@@ -121,6 +139,7 @@ void breakout::Game::Render()
         // draw player
         this->player->Draw(*(this->renderer));
         // draw ball
+        this->ballParicles->Draw();
         this->ball->Draw(*(this->renderer));
     }
 }

@@ -18,11 +18,16 @@ breakout::Shader &breakout::Shader::Use()
 }
 void breakout::Shader::Compile(std::string &vertexSource, const std::string &fragmentSource, const std::string &geometrySource)
 {
+#if defined(_DEBUG)
+    this->vSource = vertexSource;
+    this->fSource = fragmentSource;
+    this->gSource = geometrySource;
+#endif
     unsigned int vShader, fShader, gShader;
     const char *src = nullptr;
-    vShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vShader, 1, &(src = vertexSource.c_str()), nullptr);
-    glCompileShader(vShader);
+    vShader = GL_CHECK(glCreateShader(GL_VERTEX_SHADER));
+    GL_CHECK(glShaderSource(vShader, 1, &(src = vertexSource.c_str()), nullptr));
+    GL_CHECK(glCompileShader(vShader));
     checkCompileError(vShader, "VERTEX");
 
     fShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -39,8 +44,8 @@ void breakout::Shader::Compile(std::string &vertexSource, const std::string &fra
     }
 
     this->ID = glCreateProgram();
-    glAttachShader(this->ID, vShader);
-    glAttachShader(this->ID, fShader);
+    GL_CHECK(glAttachShader(this->ID, vShader));
+    GL_CHECK(glAttachShader(this->ID, fShader));
     if (geometrySource != "")
     {
         glAttachShader(this->ID, gShader);
@@ -48,7 +53,6 @@ void breakout::Shader::Compile(std::string &vertexSource, const std::string &fra
     GL_CHECK(glLinkProgram(this->ID));
     checkCompileError(this->ID, "PROGRAM");
 
-    glAttachShader(this->ID, vShader);
     glDeleteShader(vShader);
     glDeleteShader(fShader);
     if (geometrySource != "")

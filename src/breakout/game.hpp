@@ -7,6 +7,8 @@
 #include "./sprite_renderer.hpp"
 #include "./game_level.hpp"
 #include "./ball_object.hpp"
+#include "./particle.hpp"
+
 // Represents the current state of the game
 
 namespace breakout
@@ -58,6 +60,7 @@ namespace breakout
         SpriteRenderer *renderer;
         GameObject *player;
         BallObject *ball;
+        ParticleEmmiter *ballParicles;
 
         /** 
          * AABB-Circle collision detection

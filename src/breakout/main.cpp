@@ -40,7 +40,6 @@ namespace breakout
             glfwTerminate();
             return -1;
         }
-        glGetError();
         printGLInfo();
         glViewport(0, 0, screenWidth, screenHeight);
         glfwSetFramebufferSizeCallback(window, [](GLFWwindow *, int w, int h) {
@@ -58,6 +57,8 @@ namespace breakout
                 Breakout.Keys[key] = (action == GLFW_PRESS || action == GLFW_REPEAT);
             }
         });
+        GLClearError();
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

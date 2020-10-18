@@ -1,5 +1,6 @@
-#include "./texture.hpp"
 #include <glad/glad.h>
+#include "./texture.hpp"
+#include "../gl/gl_utils.h"
 
 breakout::Texture2D::Texture2D()
     : Width(0), Height(0), InternalFormat(GL_RGB), ImageFormat(GL_RGB), WrapS(GL_REPEAT), WrapT(GL_REPEAT), FilterMin(GL_LINEAR), FilterMag(GL_LINEAR)
@@ -28,5 +29,5 @@ void breakout::Texture2D::Generate(unsigned int width, unsigned int height, unsi
 
 void breakout::Texture2D::Bind() const
 {
-    glBindTexture(GL_TEXTURE_2D, this->ID);
+    GL_CHECK(glBindTexture(GL_TEXTURE_2D, this->ID));
 }

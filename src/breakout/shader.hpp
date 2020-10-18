@@ -11,6 +11,16 @@ namespace breakout
 {
     class Shader
     {
+
+    private:
+#if defined(_DEBUG)
+        std::string vSource;
+        std::string fSource;
+        std::string gSource;
+#endif
+        // check if compilation or linking failed and if so, print the error message
+        void checkCompileError(unsigned int object, const std::string &type);
+
     public:
         unsigned int ID;
 
@@ -29,10 +39,6 @@ namespace breakout
         void SetVector4f(const std::string &name, float x, float y, float z, float w, bool useShader = false);
         void SetVector4f(const std::string &name, const glm::vec4 &value, bool useShader = false);
         void SetMatrix4(const std::string &name, const glm::mat4 &matrix, bool useShader = false);
-
-    private:
-        // check if compilation or linking failed and if so, print the error message
-        void checkCompileError(unsigned int object, const std::string &type);
     };
 
 } // namespace breakout
