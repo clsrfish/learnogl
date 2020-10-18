@@ -81,6 +81,10 @@ void breakout::Game::Init()
 
     // init post processor
     this->postProcessor = new PostProcessor(this->Width, this->Height, postProcessShader);
+
+    // audio
+    this->audioManager = new breakout::AudioManager();
+    this->audioManager->PlaySound("assets/sound/breakout.mp3", true);
 }
 
 void breakout::Game::Update(float dt)
@@ -193,10 +197,12 @@ void breakout::Game::doCollisions()
         breakout::Collision collision = checkCollision(*(this->ball), obj);
         if (!std::get<0>(collision))
         {
+            this->audioManager->PlaySound("assets/sound/solid.wav");
             continue;
         }
         if (!obj.IsSolid)
         {
+            this->audioManager->PlaySound("assets/sound/bleep.mp3");
             obj.IsDestroyed = true;
         }
         else
@@ -226,6 +232,7 @@ void breakout::Game::doCollisions()
     Collision collision = checkCollision(*ball, *(this->player));
     if (!(*ball).Stuck && std::get<0>(collision) && std::get<1>(collision) == UP) // only top edge collision allowed
     {
+        this->audioManager->PlaySound("assets/sound/bleep.wav");
         auto paddle = this->player;
         float paddleCenter = (*paddle).Position.x + (*paddle).Size.x / 2.0f;
         float distance = std::abs((ball->Position.x + ball->Radius) - paddleCenter);

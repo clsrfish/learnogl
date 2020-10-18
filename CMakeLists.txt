@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(demo VERSION 0.0.1)
+project(learnogl VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -22,6 +22,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/libs/glad/include 
     ${PROJECT_SOURCE_DIR}/libs/glfw/include
     ${PROJECT_SOURCE_DIR}/libs/glm/include
+    ${PROJECT_SOURCE_DIR}/libs/irrklang/include
     ${PROJECT_SOURCE_DIR}/libs/stb_image/include
 )
 link_directories(
@@ -46,25 +47,39 @@ set_target_properties(assimp
     PROPERTIES 
     IMPORTED_LOCATION 
     ${PROJECT_SOURCE_DIR}/libs/assimp/lib/libassimp.5.dylib)
-# add_library(irrxml 
-#     SHARED 
-#     IMPORTED)
-# set_target_properties(irrxml 
-#     PROPERTIES 
-#     IMPORTED_LOCATION 
-#     ${PROJECT_SOURCE_DIR}/libs/assimp/lib/libIrrXML.dylib)
+# irrKlang
+add_library(irrklang 
+    SHARED 
+    IMPORTED)
+set_target_properties(irrklang 
+    PROPERTIES 
+    IMPORTED_LOCATION 
+    ${PROJECT_SOURCE_DIR}/libs/irrklang/lib/libirrklang.dylib)
 
-set(LINK_LIBS assimp glad glfw stb_image)
+set(LINK_LIBS assimp glad glfw irrklang stb_image)
 
 add_subdirectory(src)
 add_subdirectory(libs)
 
-add_executable(main main.cpp)
+add_executable(${PROJECT_NAME} main.cpp)
 target_include_directories(
-    main PUBLIC
+    ${PROJECT_NAME} PUBLIC
     ${PROJECT_BINARY_DIR}
 )
-target_link_libraries(main src ${LINK_LIBS})
+target_link_libraries(${PROJECT_NAME} src ${LINK_LIBS})
+
+if(APPLE)
+    message("Adding add_custom_command")
+    add_custom_command(TARGET ${PROJECT_NAME}
+    COMMAND echo "Changing irrklang reference path"
+    COMMAND install_name_tool -add_rpath ${PROJECT_SOURCE_DIR}/libs/irrklang/lib 
+    # -change /usr/local/lib/libikpFLAC.dylib @rpath/ikpFLAC.dylib 
+    # -change /usr/local/lib/libikpMP3.dylib @rpath/ikpMP3.dylib 
+    -change /usr/local/lib/libirrklang.dylib @rpath/libirrklang.dylib ${PROJECT_NAME}
+    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/libs/irrklang/lib/ikpFLAC.dylib ${PROJECT_SOURCE_DIR}/ikpFLAC.dylib
+    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/libs/irrklang/lib/ikpMP3.dylib ${PROJECT_SOURCE_DIR}/ikpMP3.dylib
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+endif(APPLE)
 
 # Test case 
 include(CTest)

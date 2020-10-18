@@ -1,4 +1,9 @@
 *.DS_Store
+.tmp
+/*.dylib
+
+setup.sh
+
 build/*
 !build/.gitkeep
 

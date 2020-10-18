@@ -17,6 +17,10 @@ chmod +x ./run.sh
 ./run.sh
 ```
 
-### Assets
+### Assets & third-party libraries
+
+[![](https://learnopengl-cn.github.io/img/01/02/glfw.png)](https://www.glfw.org/)
 
 [nanosuit](https://learnopengl-cn.github.io/data/nanosuit.rar)
+
+[![](https://learnopengl.com/img/in-practice/breakout/irrklang.png)](https://baidu.com)

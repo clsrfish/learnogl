@@ -9,6 +9,7 @@
 #include "./ball_object.hpp"
 #include "./particle.hpp"
 #include "./post_processor.hpp"
+#include "./audio_manager.hpp"
 
 // Represents the current state of the game
 
@@ -58,6 +59,7 @@ namespace breakout
         void ResetPlayer();
 
     private:
+        AudioManager *audioManager;
         SpriteRenderer *renderer;
         GameObject *player;
         BallObject *ball;

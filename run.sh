@@ -3,8 +3,8 @@
 if [ ! -d build ]; then
     echo "-- Build directory not exists"
 fi
-if [ -f ./build/main ]; then
-    rm ./build/main
+if [ -f ./build/learnogl ]; then
+    rm ./build/learnogl
 fi
 
 cmake --log-level=VERBOSE -Wdev -DCMAKE_BUILD_TYPE=Debug -S . -B build
@@ -21,5 +21,7 @@ echo "-- CPU core: $cpu_core"
 
 make -j${cpu_core} -C build
 
-echo "-- Launching main"
-./build/main
+otool -L build/learnogl
+
+echo "-- Launching learnogl"
+./build/learnogl
