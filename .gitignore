@@ -2,8 +2,6 @@
 .tmp
 /*.dylib
 
-setup.sh
-
 build/*
 !build/.gitkeep
 

@@ -2,12 +2,6 @@
 
 ## Quick Start Guide
 
-### Add third-party libraries
-
-Installing or building third-party libraries before running, these libraries are required:
-
-* [assimp](http://assimp.org) 
-
 ### Run
 
 Execute the shell script run.sh, make sure you have the executation permission before doing that.
@@ -19,7 +13,11 @@ chmod +x ./run.sh
 
 ### Assets & third-party libraries
 
-[![](https://learnopengl-cn.github.io/img/01/02/glfw.png)](https://www.glfw.org/)
+[![](https://learnopengl-cn.github.io/img/01/02/glfw.png)](https://www.glfw.org)
+
+[![](https://learnopengl-cn.github.io/img/01/07/glm.png)](https://github.com/g-truc/glm)
+
+[assimp](https://github.com/assimp/assimp)
 
 [nanosuit](https://learnopengl-cn.github.io/data/nanosuit.rar)
 
