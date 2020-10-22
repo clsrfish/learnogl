@@ -10,6 +10,7 @@
 #include "./particle.hpp"
 #include "./post_processor.hpp"
 #include "./audio_manager.hpp"
+#include "./text_renderer.hpp"
 
 // Represents the current state of the game
 
@@ -60,6 +61,7 @@ namespace breakout
 
     private:
         AudioManager *audioManager;
+        TextRenderer *textRenderer;
         SpriteRenderer *renderer;
         GameObject *player;
         BallObject *ball;

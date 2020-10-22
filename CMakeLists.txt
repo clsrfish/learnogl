@@ -19,6 +19,7 @@ include_directories(
     /usr/local/include
     ${PROJECT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR}/libs/assimp/include 
+    ${PROJECT_SOURCE_DIR}/libs/freetype/include 
     ${PROJECT_SOURCE_DIR}/libs/glad/include 
     ${PROJECT_SOURCE_DIR}/libs/glfw/include
     ${PROJECT_SOURCE_DIR}/libs/glm/include
@@ -55,8 +56,16 @@ set_target_properties(irrklang
     PROPERTIES 
     IMPORTED_LOCATION 
     ${PROJECT_SOURCE_DIR}/libs/irrklang/lib/libirrklang.dylib)
+# freetype
+add_library(freetype 
+    SHARED 
+    IMPORTED)
+set_target_properties(freetype 
+    PROPERTIES 
+    IMPORTED_LOCATION 
+    ${PROJECT_SOURCE_DIR}/libs/freetype/lib/libfreetype.6.16.0.dylib)
 
-set(LINK_LIBS assimp glad glfw irrklang stb_image)
+set(LINK_LIBS assimp freetype glad glfw irrklang stb_image)
 
 add_subdirectory(src)
 add_subdirectory(libs)

@@ -48,3 +48,16 @@ if [ ! -e assimp.zip ]; then
     cp build/code/libassimp.5.0.0.dylib ${cwd}/libs/assimp/lib/libassimp.5.dylib
     cd ../
 fi
+
+# freetype
+if [ ! -e freetype.tar.gz ]; then
+    echo "Downloading freetype"
+    curl -L 'https://download.savannah.gnu.org/releases/freetype/freetype-2.10.0.tar.gz' -o freetype.tar.gz
+    tar -zxvf freetype.tar.gz
+    cd freetype-2.10.0 && mkdir build && cd build
+    cmake -D BUILD_SHARED_LIBS:BOOL=true .. && make
+    cd ../
+    cp -r include ${cwd}/lib/freetype/
+    cp build/libfreetype.6.16.0.dylib ${cwd}/lib/freetype/lib/
+    cd ../
+fi

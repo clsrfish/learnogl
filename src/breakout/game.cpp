@@ -4,6 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <ft2build.h>
 #include "./game.hpp"
 #include "./resource_manager.hpp"
 #include "../utils/log.h"
@@ -21,6 +22,9 @@ breakout::Game::Game(unsigned int width, unsigned int height)
 
 breakout::Game::~Game()
 {
+    delete textRenderer;
+    delete audioManager;
+    delete postProcessor;
 }
 
 void breakout::Game::Init()
@@ -31,11 +35,14 @@ void breakout::Game::Init()
     breakout::Shader spriteShader = ResourceManager::LoadShader("shaders/breakout/sprite.vs", "shaders/breakout/sprite.fs", "", "sprite");
     breakout::Shader particleShader = ResourceManager::LoadShader("shaders/breakout/particle.vs", "shaders/breakout/particle.fs", "", "particle");
     breakout::Shader postProcessShader = ResourceManager::LoadShader("shaders/breakout/postprocess.vs", "shaders/breakout/postprocess.fs", "", "postprocess");
+    breakout::Shader textShader = ResourceManager::LoadShader("shaders/breakout/text.vs", "shaders/breakout/text.fs", "", "text");
 
     spriteShader.SetInteger("image", 0, true);
     spriteShader.SetMatrix4("projection", projection);
     particleShader.SetInteger("sprite", 0, true);
     particleShader.SetMatrix4("projection", projection);
+    textShader.SetInteger("text", 0, true);
+    textShader.SetMatrix4("projection", glm::ortho(0.0f, static_cast<float>(this->Width), 0.0f, static_cast<float>(this->Height)));
     GLClearError();
 
     this->renderer = new breakout::SpriteRenderer(spriteShader);
@@ -85,6 +92,8 @@ void breakout::Game::Init()
     // audio
     this->audioManager = new breakout::AudioManager();
     this->audioManager->PlaySound("assets/sound/breakout.mp3", true);
+    // text
+    this->textRenderer = new breakout::TextRenderer();
 }
 
 void breakout::Game::Update(float dt)
@@ -156,6 +165,8 @@ void breakout::Game::Render()
         this->ball->Draw(*(this->renderer));
         this->postProcessor->EndRender();
         this->postProcessor->Render(glfwGetTime());
+        //draw text
+        this->textRenderer->RenderText("(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
     }
 }
 
